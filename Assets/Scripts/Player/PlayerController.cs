@@ -3,30 +3,68 @@
 public class PlayerController : BaseBehaviour {
   private const string VERTICAL_AXIS = "Vertical";
   private const string HORIZONTAL_AXIS = "Horizontal";
-  private const string RUN_KEY = "Run";
+  private const string MOUSE_WHEEL_AXIS = "Mouse ScrollWheel";
+  private const string RUN_BUTTON = "Run";
+  private const string SIGN_BUTTON = "Sign";
 
   private const float RUN_ENERGY_COST = 5;
+
+  private static PlayerController instance;
+  public static PlayerController Instance {
+    get {
+      return instance;
+    }
+  }
 
   private MovementController playerMovementController;
   private Speed playerSpeed;
   private Energy playerEnergy;
+  private Sign[] signs;
+  private int selectedSignId;
+
+  public Sign SelectedSign {
+    get {
+      return signs[selectedSignId];
+    }
+  }
+
+  protected override void OnAwake() {
+    base.OnAwake();
+
+    if (instance != null) {
+      Destroy(gameObject);
+      return;
+    }
+
+    instance = this;
+  }
 
   protected override void OnStart() {
     base.OnStart();
 
+    // We cache all these scripts in "OnStart" instead of "OnAwake" to be sure
+    // player is already spawned. Should player not be spawned immediately, we
+    // could just use a coroutine that would wait for player spawn here, or
+    // delegate on player that would be invoked on spawn
     playerMovementController = Player.Instance.GetComponent<MovementController>();
     playerSpeed = Player.Instance.GetComponent<Speed>();
     playerEnergy = Player.Instance.GetComponent<Energy>();
+    signs = Player.Instance.GetComponents<Sign>();
+    selectedSignId = 0;
   }
 
   protected override void OnUpdate() {
     base.OnUpdate();
+    HandleMovement();
+    HandleSigns();
+  }
 
-    if (Input.GetButtonDown(RUN_KEY) && playerEnergy.CurrentEnergy > RUN_ENERGY_COST) {
+  private void HandleMovement() {
+    if (Input.GetButtonDown(RUN_BUTTON) && playerEnergy.CurrentEnergy > RUN_ENERGY_COST) {
       playerSpeed.IsRunning = true;
     }
 
-    if (Input.GetButtonUp(RUN_KEY)) {
+    if (Input.GetButtonUp(RUN_BUTTON)) {
       playerSpeed.IsRunning = false;
     }
 
@@ -45,6 +83,14 @@ public class PlayerController : BaseBehaviour {
       playerMovementController.Stop();
     } else {
       playerMovementController.MoveInDirection(dirVector);
+    }
+  }
+
+  private void HandleSigns() {
+    selectedSignId = (signs.Length + (int)Input.GetAxis(MOUSE_WHEEL_AXIS)) % signs.Length;
+
+    if (Input.GetButtonDown(SIGN_BUTTON)) {
+      SelectedSign.Perform();
     }
   }
 }

@@ -70,7 +70,7 @@ public class MovementController : BaseBehaviour {
   ) {
     MovementType = MovementTypeEnum.TARGET;
     target = position;
-    IsMoving = true;
+    IsMoving = CanMove;
     this.distance = distance;
   }
 
@@ -80,7 +80,7 @@ public class MovementController : BaseBehaviour {
   ) {
     MovementType = MovementTypeEnum.FOLLOW;
     followed = go;
-    IsMoving = true;
+    IsMoving = CanMove;
     this.distance = distance;
   }
 
@@ -97,7 +97,7 @@ public class MovementController : BaseBehaviour {
     MovementType = MovementTypeEnum.DIRECTION;
     directionVector = dir;
     distance = 0;
-    IsMoving = true;
+    IsMoving = CanMove;
   }
 
   public void MoveInstantly(Vector3 position, bool forwardOverNetwork = true) {
@@ -175,7 +175,13 @@ public class MovementController : BaseBehaviour {
       }
 
       IsMoving = true;
-    } else if (moveVector.magnitude < distance) {
+    }
+
+    if (!canMove) {
+      IsMoving = false;
+    }
+
+    if (moveVector.magnitude < distance) {
       IsMoving = false;
 
       // We reached the target spot, invoke stop, so the character doesn't run 

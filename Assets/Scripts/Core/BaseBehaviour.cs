@@ -26,27 +26,27 @@ public class BaseBehaviour : MonoBehaviour {
     OnWillDestroy();
   }
 
-  protected void OnTriggerEnter2D(Collider2D collider) {
-    OnTriggerDidEnter2D(collider);
+  protected void OnTriggerEnter(Collider collider) {
+    OnTriggerDidEnter(collider);
   }
 
-  protected void OnTriggerStay2D(Collider2D collider) {
-    OnTrigger2D(collider);
+  protected void OnTriggerStay(Collider collider) {
+    OnTrigger(collider);
   }
 
-  protected void OnTriggerExit2D(Collider2D collider) {
+  protected void OnTriggerExit(Collider collider) {
     OnTriggerDidExit(collider);
   }
 
-  protected void OnCollisionEnter2D(Collision2D collision) {
-    OnCollisionDidEnter2D(collision);
+  protected void OnCollisionEnter(Collision collision) {
+    OnCollisionDidEnter(collision);
   }
 
-  protected void OnCollisionStay2D(Collision2D collision) {
-    OnCollision2D(collision);
+  protected void OnCollisionStay(Collision collision) {
+    OnCollision(collision);
   }
 
-  protected void OnCollisionExit2D(Collision2D collision) {
+  protected void OnCollisionExit(Collision collision) {
     OnCollisionDidExit(collision);
   }
 
@@ -60,11 +60,11 @@ public class BaseBehaviour : MonoBehaviour {
   protected virtual void OnPhysicsUpdate() { }
   protected virtual void OnLateUpdate() { }
   protected virtual void OnWillDestroy() { }
-  protected virtual void OnTriggerDidEnter2D(Collider2D collider) { }
-  protected virtual void OnTrigger2D(Collider2D collider) { }
-  protected virtual void OnTriggerDidExit(Collider2D collider) { }
-  protected virtual void OnCollisionDidEnter2D(Collision2D collision) { }
-  protected virtual void OnCollision2D(Collision2D collision) { }
-  protected virtual void OnCollisionDidExit(Collision2D collision) { }
+  protected virtual void OnTriggerDidEnter(Collider collider) { }
+  protected virtual void OnTrigger(Collider collider) { }
+  protected virtual void OnTriggerDidExit(Collider collider) { }
+  protected virtual void OnCollisionDidEnter(Collision collision) { }
+  protected virtual void OnCollision(Collision collision) { }
+  protected virtual void OnCollisionDidExit(Collision collision) { }
   protected virtual void OnParticlesCollision(GameObject other) { }
 }

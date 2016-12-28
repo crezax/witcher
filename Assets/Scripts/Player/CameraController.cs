@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(MovementController))]
-public class CameraController : PlayerController {
+public class CameraController : BaseBehaviour {
   private static CameraController instance;
 
   private const string MOUSE_AXIS_X = "Mouse X";
