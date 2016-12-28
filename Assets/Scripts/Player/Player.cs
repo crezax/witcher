@@ -2,6 +2,7 @@
 
 [RequireComponent(typeof(MovementController))]
 [RequireComponent(typeof(Speed))]
+[RequireComponent(typeof(Energy))]
 public class Player : BaseBehaviour, IHasRotationSpeed {
   private static Player instance;
 
@@ -10,6 +11,8 @@ public class Player : BaseBehaviour, IHasRotationSpeed {
       return instance;
     }
   }
+
+  private Energy energy;
 
   public float RotationSpeed {
     get {
@@ -26,5 +29,14 @@ public class Player : BaseBehaviour, IHasRotationSpeed {
     }
 
     instance = this;
+    energy = GetComponent<Energy>();
+  }
+
+  protected override void OnStart() {
+    base.OnStart();
+
+    energy.MaxEnergy = 100;
+    energy.RegenerationDelay = 1;
+    energy.RegenerationRate = 50;
   }
 }
