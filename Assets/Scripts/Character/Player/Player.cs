@@ -1,4 +1,6 @@
-﻿public class Player : Character, IHasRotationSpeed {
+﻿using UnityEngine;
+
+public class Player : Character, IHasRotationSpeed {
   private static Player instance;
 
   public static Player Instance {
@@ -22,5 +24,15 @@
     }
 
     instance = this;
+  }
+
+  protected override void OnAttackerRegistered(GameObject attacker) {
+    base.OnAttackerRegistered(attacker);
+
+    Character character = attacker.GetComponent<Character>();
+    if (character == null) {
+      return;
+    }
+    UIController.Instance.ShowNpcResourceBars(character);
   }
 }

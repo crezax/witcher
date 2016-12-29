@@ -6,6 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(Energy))]
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Collider))]
 public class Character : BaseBehaviour {
   public virtual bool InCombat {
     get {
@@ -20,6 +22,7 @@ public class Character : BaseBehaviour {
   private MovementController movementController;
   private Animator animator;
   private CombatBehaviour[] combatBehaviours;
+  private Collider characterCollider;
 
   public Energy Energy {
     get {
@@ -45,6 +48,12 @@ public class Character : BaseBehaviour {
     }
   }
 
+  public float Height {
+    get {
+      return characterCollider.bounds.size.y;
+    }
+  }
+
   protected override void OnAwake() {
     base.OnAwake();
 
@@ -54,6 +63,7 @@ public class Character : BaseBehaviour {
     combatBehaviours = GetComponents<CombatBehaviour>();
     attackers = new HashSet<GameObject>();
     animator = GetComponent<Animator>();
+    characterCollider = GetComponent<Collider>();
   }
 
   protected override void OnStart() {
@@ -80,11 +90,17 @@ public class Character : BaseBehaviour {
 
   public void RegisterAttacker(GameObject attacker) {
     attackers.Add(attacker);
+    OnAttackerRegistered(attacker);
   }
+
+  protected virtual void OnAttackerRegistered(GameObject attacker) { }
 
   public void UnregisterAttacker(GameObject attacker) {
     attackers.Remove(attacker);
+    OnAttackerUnregistered(attacker);
   }
+
+  protected virtual void OnAttackerUnregistered(GameObject attacker) { }
 
   // These 2 functions make use of "CombatBehaviours". They are used for things
   // like removing regeneration in combat or comming back to spawn point after
