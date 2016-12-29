@@ -31,7 +31,7 @@ public abstract class Effect : BaseBehaviour {
     base.OnStart();
 
     if (!IsValidTarget(target)) {
-      Destroy(this);
+      Destroy(gameObject);
       return;
     }
 
@@ -42,7 +42,7 @@ public abstract class Effect : BaseBehaviour {
     base.OnUpdate();
 
     if (DurationLeft < 0) {
-      Destroy(this);
+      Destroy(gameObject);
       return;
     }
 
