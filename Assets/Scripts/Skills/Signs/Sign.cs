@@ -13,22 +13,26 @@ public abstract class Sign : Skill {
     }
   }
 
-  protected override bool CanPerform {
-    get {
-      return Energy.CurrentEnergy >= EnergyCost;
-    }
+  public override bool CanPerform(GameObject target) {
+    return Energy.CurrentValue >= EnergyCost;
   }
 
   protected override float CastTime {
     get {
       // 1.167 is the duration of skill animation, so I guess this will have to
       // do for prototype
+      return 1.167f;
+    }
+  }
+
+  protected override float EffectTime {
+    get {
       return 1f;
     }
   }
 
   protected override void PaySkillCost() {
-    Energy.CurrentEnergy -= EnergyCost;
+    Energy.CurrentValue -= EnergyCost;
   }
 
   protected override void OnAwake() {

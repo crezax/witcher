@@ -5,6 +5,7 @@ public class MovementController : BaseBehaviour {
   private Vector3 target;
   private float distance;
   private GameObject followed;
+  private GameObject watchTarget;
   private Vector3 directionVector;
   private MovementTypeEnum movementType;
   private bool isMoving;
@@ -34,11 +35,11 @@ public class MovementController : BaseBehaviour {
         return;
       }
       if (speed.IsRunning) {
-        animator.SetBool("IsRunning", isMoving);
-        animator.SetBool("IsWalking", false);
+        animator.SetBool(AnimationConstants.IS_RUNNING, isMoving);
+        animator.SetBool(AnimationConstants.IS_WALKING, false);
       } else {
-        animator.SetBool("IsRunning", false);
-        animator.SetBool("IsWalking", isMoving);
+        animator.SetBool(AnimationConstants.IS_RUNNING, false);
+        animator.SetBool(AnimationConstants.IS_WALKING, isMoving);
       }
     }
   }
@@ -93,6 +94,11 @@ public class MovementController : BaseBehaviour {
     }
   }
 
+  public void KeepLookingAt(GameObject go) {
+    MovementType = MovementTypeEnum.LOOK_AT;
+    watchTarget = go;
+  }
+
   public void MoveInDirection(Vector3 dir) {
     MovementType = MovementTypeEnum.DIRECTION;
     directionVector = dir;
@@ -131,6 +137,7 @@ public class MovementController : BaseBehaviour {
     }
 
     Vector3 moveVector = Vector3.zero;
+    Vector3 rotationVector = Vector3.zero;
     switch (MovementType) {
       case MovementTypeEnum.TARGET:
         moveVector = target - transform.position;
@@ -141,14 +148,21 @@ public class MovementController : BaseBehaviour {
       case MovementTypeEnum.DIRECTION:
         moveVector = directionVector.normalized;
         break;
+      case MovementTypeEnum.LOOK_AT:
+        rotationVector = watchTarget.transform.position - transform.position;
+        break;
       case MovementTypeEnum.STOP:
         IsMoving = false;
         return;
     }
 
+    if (moveVector != Vector3.zero) {
+      rotationVector = moveVector;
+    }
+
     //Rotate in direction you should move
     if (canMove) {
-      Quaternion targetRotation = Quaternion.LookRotation(moveVector);
+      Quaternion targetRotation = Quaternion.LookRotation(rotationVector);
 
       if (rotationSpeed != null) {
         transform.rotation = Quaternion.RotateTowards(
@@ -162,7 +176,11 @@ public class MovementController : BaseBehaviour {
     }
 
     // Move towards target, but keep your distance
-    if (moveVector.magnitude > distance && canMove) {
+    if (
+      moveVector.magnitude > distance &&
+      canMove &&
+      MovementType != MovementTypeEnum.LOOK_AT
+    ) {
       Vector3 targetPosition = transform.position +
         transform.forward *
         speed.CurrentSpeed *
@@ -193,6 +211,6 @@ public class MovementController : BaseBehaviour {
   }
 
   private enum MovementTypeEnum {
-    TARGET, DIRECTION, FOLLOW, STOP
+    TARGET, DIRECTION, FOLLOW, LOOK_AT, STOP
   }
 }

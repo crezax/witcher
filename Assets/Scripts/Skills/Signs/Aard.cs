@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
+// Test inspired by https://youtu.be/iA_Y-R9dbHA?t=1m39s
 [RequireComponent(typeof(Energy))]
 public class Aard : Sign {
-  private Energy energy;
   [SerializeField]
   private GameObject shockwavePrefab;
 
@@ -19,11 +19,5 @@ public class Aard : Sign {
       transform.rotation
     );
     shockWaveGO.GetComponent<Shockwave>().Caster = gameObject;
-  }
-
-  protected override void OnAwake() {
-    base.OnAwake();
-
-    energy = GetComponent<Energy>();
   }
 }

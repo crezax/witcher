@@ -4,8 +4,9 @@ using UnityEngine;
 public abstract class Skill : BaseBehaviour {
 
   protected abstract float CastTime { get; }
+  protected abstract float EffectTime { get; }
   protected abstract void PerformImplementation();
-  protected abstract bool CanPerform { get; }
+  public abstract bool CanPerform(GameObject target);
   protected abstract void PaySkillCost();
 
   private MovementController movementController;
@@ -20,15 +21,21 @@ public abstract class Skill : BaseBehaviour {
     animator = GetComponent<Animator>();
   }
 
-  public void Perform() {
-    if (!CanPerform || !movementController.CanMove) {
+  public void Perform(GameObject target) {
+    if (!CanPerform(target) || !movementController.CanMove) {
       return;
     }
     StartCoroutine(PerformCoroutine());
   }
 
+  protected virtual string AnimationName {
+    get {
+      return AnimationConstants.SKILL;
+    }
+  }
+
   private IEnumerator PerformCoroutine() {
-    animator.SetTrigger("Skill");
+    animator.SetTrigger(AnimationName);
 
     if (movementController != null) {
       movementController.Stop();
@@ -36,9 +43,10 @@ public abstract class Skill : BaseBehaviour {
     }
     PaySkillCost();
     IsPerforming = true;
-    yield return new WaitForSeconds(CastTime);
-    IsPerforming = false;
+    yield return new WaitForSeconds(EffectTime);
     PerformImplementation();
+    yield return new WaitForSeconds(CastTime - EffectTime);
+    IsPerforming = false;
     if (movementController != null) {
       movementController.CanMove = true;
     }

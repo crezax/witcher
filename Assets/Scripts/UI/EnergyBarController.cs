@@ -15,6 +15,6 @@ public class EnergyBarController : BaseBehaviour {
   protected override void OnUpdate() {
     base.OnUpdate();
 
-    energy.fillAmount = playerEnergy.CurrentEnergy / playerEnergy.MaxEnergy;
+    energy.fillAmount = playerEnergy.CurrentValue / playerEnergy.MaxValue;
   }
 }

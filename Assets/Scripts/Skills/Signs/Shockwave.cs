@@ -36,6 +36,7 @@ public class Shockwave : BaseBehaviour {
       return;
     }
     victims.Add(collider.gameObject);
-    victimRigidbody.AddForce(transform.forward * Power, ForceMode.Impulse);
+    victimRigidbody.gameObject.AddComponent<Knockback>().Force =
+      transform.forward * Power;
   }
 }

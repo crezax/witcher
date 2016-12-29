@@ -6,6 +6,7 @@ public class PlayerController : BaseBehaviour {
   private const string MOUSE_WHEEL_AXIS = "Mouse ScrollWheel";
   private const string RUN_BUTTON = "Run";
   private const string SIGN_BUTTON = "Sign";
+  private const string SWORD_BUTTON = "Sword";
 
   private const float RUN_ENERGY_COST = 5;
 
@@ -21,6 +22,7 @@ public class PlayerController : BaseBehaviour {
   private Energy playerEnergy;
   private Sign[] signs;
   private int selectedSignId;
+  private MeleeAttack meleeAttack;
 
   public Sign SelectedSign {
     get {
@@ -50,6 +52,7 @@ public class PlayerController : BaseBehaviour {
     playerSpeed = Player.Instance.GetComponent<Speed>();
     playerEnergy = Player.Instance.GetComponent<Energy>();
     signs = Player.Instance.GetComponents<Sign>();
+    meleeAttack = Player.Instance.GetComponent<MeleeAttack>();
     selectedSignId = 0;
   }
 
@@ -57,10 +60,11 @@ public class PlayerController : BaseBehaviour {
     base.OnUpdate();
     HandleMovement();
     HandleSigns();
+    HandleSwordCombat();
   }
 
   private void HandleMovement() {
-    if (Input.GetButtonDown(RUN_BUTTON) && playerEnergy.CurrentEnergy > RUN_ENERGY_COST) {
+    if (Input.GetButtonDown(RUN_BUTTON) && playerEnergy.CurrentValue > RUN_ENERGY_COST) {
       playerSpeed.IsRunning = true;
     }
 
@@ -69,8 +73,8 @@ public class PlayerController : BaseBehaviour {
     }
 
     if (playerSpeed.IsRunning && playerMovementController.IsMoving) {
-      playerEnergy.CurrentEnergy -= RUN_ENERGY_COST * Time.deltaTime;
-      if (playerEnergy.CurrentEnergy == 0) {
+      playerEnergy.CurrentValue -= RUN_ENERGY_COST * Time.deltaTime;
+      if (playerEnergy.CurrentValue == 0) {
         playerSpeed.IsRunning = false;
       }
     }
@@ -90,7 +94,14 @@ public class PlayerController : BaseBehaviour {
     selectedSignId = (signs.Length + (int)Input.GetAxis(MOUSE_WHEEL_AXIS)) % signs.Length;
 
     if (Input.GetButtonDown(SIGN_BUTTON)) {
-      SelectedSign.Perform();
+      // TODO: Some targeting manager would be nice
+      SelectedSign.Perform(null);
+    }
+  }
+
+  private void HandleSwordCombat() {
+    if (Input.GetButtonDown(SWORD_BUTTON)) {
+      meleeAttack.Perform(null);
     }
   }
 }
