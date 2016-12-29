@@ -11,8 +11,8 @@ public class UIController : BaseBehaviour {
   }
 
   [SerializeField]
-  private GameObject npcHealthBarPrefab;
-  private Dictionary<GameObject, List<GameObject>> npcToResourceBars;
+  private GameObject npcInfoPrefab;
+  private Dictionary<GameObject, GameObject> npcToResourceBars;
 
   protected override void OnAwake() {
     base.OnAwake();
@@ -23,37 +23,28 @@ public class UIController : BaseBehaviour {
     }
 
     instance = this;
-    npcToResourceBars = new Dictionary<GameObject, List<GameObject>>();
+    npcToResourceBars = new Dictionary<GameObject, GameObject>();
   }
 
   public void ShowNpcResourceBars(Character npc) {
     if (npcToResourceBars.ContainsKey(npc.gameObject)) {
       return;
     }
-    npcToResourceBars[npc.gameObject] = new List<GameObject>();
-    Health npcHealth = npc.GetComponent<Health>();
-
-    GameObject healthBarGO = (GameObject)Instantiate(
-      npcHealthBarPrefab,
+    GameObject npcInfoGO = (GameObject)Instantiate(
+      npcInfoPrefab,
       transform,
       false
     );
-    NPCResourceBar healthBar = healthBarGO.GetComponent<NPCResourceBar>();
-    healthBar.resource = npcHealth;
-    healthBar.Offset = npc.Height;
-
-    npcToResourceBars[npc.gameObject].Add(healthBarGO);
+    npcInfoGO.GetComponent<NPCInfo>().Character = npc;
+    npcToResourceBars[npc.gameObject] = npcInfoGO;
   }
 
-  public void HideNpcResourceBard(GameObject npc) {
-    if (!npcToResourceBars.ContainsKey(npc)) {
+  public void HideNpcResourceBard(Character npc) {
+    if (!npcToResourceBars.ContainsKey(npc.gameObject)) {
       return;
     }
 
-    foreach (GameObject resourceBar in npcToResourceBars[npc]) {
-      Destroy(resourceBar);
-    }
-
-    npcToResourceBars.Remove(npc);
+    Destroy(npcToResourceBars[npc.gameObject]);
+    npcToResourceBars.Remove(npc.gameObject);
   }
 }

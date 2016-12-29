@@ -56,7 +56,7 @@ public class AttackWithSkillPreferenceActionProvider : ActionProvider {
       transform.position,
       target.transform.position
     );
-    if (targetDistance > chaseDistance) {
+    if (targetDistance > chaseDistance && chaseDistance > 0) {
       movementController.KeepLookingAt(target);
       if (animator != null) {
         animator.SetBool(AnimationConstants.IS_WATCHING, true);

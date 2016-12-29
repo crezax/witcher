@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 public class MeleeAttack : Skill {
   [SerializeField]
-  private DelegateCollider attackRange;
-  private List<Health> potentialTargets;
+  private CharacterDetector attackRange;
 
   public float BaseDamage { get; set; }
   public float BonusDamage { get; set; }
@@ -20,28 +18,6 @@ public class MeleeAttack : Skill {
 
     // Some defaults
     BaseDamage = 10;
-
-    potentialTargets = new List<Health>();
-    attackRange.TriggerDidEnterEvent += OnAttackRangeEnter;
-    attackRange.TriggerDidExitEvent += OnAttackRangeExit;
-  }
-
-  private void OnAttackRangeEnter(Collider collider) {
-    Health health = collider.GetComponent<Health>();
-    if (health == null) {
-      return;
-    }
-
-    potentialTargets.Add(health);
-  }
-
-  private void OnAttackRangeExit(Collider collider) {
-    Health health = collider.GetComponent<Health>();
-    if (health == null) {
-      return;
-    }
-
-    potentialTargets.Remove(health);
   }
 
   protected override string AnimationName {
@@ -61,7 +37,7 @@ public class MeleeAttack : Skill {
       return true;
     }
     // is target in range
-    return potentialTargets.Contains(targetHealth);
+    return attackRange.PotentialTargets.Contains(target);
   }
 
   protected override float CastTime {
@@ -84,11 +60,15 @@ public class MeleeAttack : Skill {
   }
 
   protected override void PerformImplementation() {
-    // Again, Unity doesn't call OnTriggerExit when object is destroyed, so get
-    // rid of nulls...
-    potentialTargets = potentialTargets.Where(t => t != null).ToList();
-    foreach (Health h in potentialTargets) {
-      h.CurrentValue -= Damage;
+    foreach (GameObject target in attackRange.PotentialTargets) {
+      Health targetHealth = target.GetComponent<Health>();
+      if (targetHealth != null) {
+        // Should always be true, unless someone created character without
+        // Health, or there is a non character layer triggering character
+        // detection layer... Maybe it would be good to even throw if thats 
+        // the case?
+        targetHealth.CurrentValue -= Damage;
+      }
     }
   }
 }

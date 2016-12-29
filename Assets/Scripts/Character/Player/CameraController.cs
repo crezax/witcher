@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 public class CameraController : BaseBehaviour {
   private static CameraController instance;
@@ -6,8 +7,29 @@ public class CameraController : BaseBehaviour {
   private const string MOUSE_AXIS_X = "Mouse X";
   private const string MOUSE_AXIS_Y = "Mouse Y";
 
-  private float yawSpeed = 4;
+  private float yawSpeed = 10;
   private float pitchSpeed = 3;
+  [SerializeField]
+  private CharacterDetector targetingDetector;
+  private Character target;
+
+  public Character Target {
+    get {
+      return target;
+    }
+    private set {
+      if (Target == value) {
+        return;
+      }
+      if (Target != null) {
+        UIController.Instance.HideNpcResourceBard(Target);
+      }
+      target = value;
+      if (Target != null) {
+        UIController.Instance.ShowNpcResourceBars(Target);
+      }
+    }
+  }
 
   public static CameraController Instance {
     get {
@@ -45,6 +67,21 @@ public class CameraController : BaseBehaviour {
     }
 
     transform.eulerAngles = targetRotation;
+
+    if (targetingDetector.PotentialTargets.Count > 0) {
+      Target = targetingDetector
+        .PotentialTargets
+        .Where(t => t.GetComponent<Character>() != null)
+        .Select(t => t.GetComponent<Character>())
+        .OrderBy(
+        t => Vector3.Distance(
+          Player.Instance.transform.position,
+          t.transform.position
+        )
+      ).First();
+    } else {
+      Target = null;
+    }
   }
 
   protected override void OnLateUpdate() {

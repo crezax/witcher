@@ -66,16 +66,6 @@ public class Character : BaseBehaviour {
     characterCollider = GetComponent<Collider>();
   }
 
-  protected override void OnStart() {
-    base.OnStart();
-
-    energy.BaseMaxValue = 100;
-    energy.RegenerationDelay = 1;
-    energy.BaseRegenRate = 50;
-    health.BaseMaxValue = 100;
-    health.BaseRegenRate = 5;
-  }
-
   protected override void OnUpdate() {
     base.OnUpdate();
 

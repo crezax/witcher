@@ -38,8 +38,9 @@ public class Shockwave : BaseBehaviour {
       return;
     }
     victims.Add(collider.gameObject);
-    Effect.Apply(knockbackPrefab, victimRigidbody.gameObject)
-      .GetComponent<KnockbackEffect>()
-      .Force = Power * transform.forward;
+    KnockbackEffect knockback = Effect.Apply(knockbackPrefab, victimRigidbody.gameObject)
+      .GetComponent<KnockbackEffect>();
+    knockback.Force = Power * transform.forward;
+    knockback.Source = transform;
   }
 }

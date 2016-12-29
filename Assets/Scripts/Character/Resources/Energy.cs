@@ -14,6 +14,7 @@ public class Energy : Resource {
   protected override void OnAwake() {
     base.OnAwake();
 
+    RegenerationDelay = 1;
     lastTimeSpent = Time.time - RegenerationDelay;
     OnValueChanged += OnEnergyChanged;
   }

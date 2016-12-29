@@ -14,14 +14,12 @@ public class RunAwayActionProvider : ActionProvider {
   public override void OnTargetSet(GameObject target) {
     if (target == null) {
       movementController.Stop();
-    } else {
-      movementController.MoveInDirection(
-        transform.position - target.transform.position
-      );
     }
   }
 
   public override void PerformAction(GameObject target) {
-    return;
+    movementController.MoveInDirection(
+        transform.position - target.transform.position
+      );
   }
 }

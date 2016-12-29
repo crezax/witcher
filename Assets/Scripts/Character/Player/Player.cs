@@ -35,4 +35,14 @@ public class Player : Character, IHasRotationSpeed {
     }
     UIController.Instance.ShowNpcResourceBars(character);
   }
+
+  protected override void OnAttackerUnregistered(GameObject attacker) {
+    base.OnAttackerUnregistered(attacker);
+
+    Character character = attacker.GetComponent<Character>();
+    if (character == null) {
+      return;
+    }
+    UIController.Instance.HideNpcResourceBard(character);
+  }
 }

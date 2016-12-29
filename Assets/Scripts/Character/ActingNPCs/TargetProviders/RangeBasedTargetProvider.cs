@@ -10,55 +10,24 @@ using UnityEngine;
 public class RangeBasedTargetProvider : TargetProvider {
 
   [SerializeField]
-  protected DelegateCollider detectionRange;
+  protected CharacterDetector detectionRange;
   [SerializeField]
-  protected DelegateCollider actionRange;
-
-  protected List<GameObject> potentialActionTargets;
-  protected List<GameObject> potentialWatchTargets;
-
-  protected override void OnAwake() {
-    base.OnAwake();
-
-    potentialActionTargets = new List<GameObject>();
-    potentialWatchTargets = new List<GameObject>();
-    detectionRange.TriggerDidEnterEvent += OnDetectionRangeTriggerEnter;
-    detectionRange.TriggerDidExitEvent += OnDetectionRangeTriggerExit;
-    actionRange.TriggerDidEnterEvent += OnActingRangeTriggerEnter;
-    actionRange.TriggerDidEnterEvent += OnActingRangeTriggerExit;
-  }
+  protected CharacterDetector actionRange;
 
   public override GameObject ProvideTarget() {
-    // Unity doesn't call TriggerExit event when game object is destroyed within
-    // the trigger, so we need to get rid of nulls sometimes...
-    potentialActionTargets = potentialActionTargets.Where(t => t != null).ToList();
+    List<GameObject> potentialActionTargets = actionRange.PotentialTargets;
     if (potentialActionTargets.Count > 0) {
       return potentialActionTargets.OrderBy(
         t => Vector3.Distance(transform.position, t.transform.position)
       ).First();
     }
-    potentialWatchTargets = potentialWatchTargets.Where(t => t != null).ToList();
+
+    List<GameObject> potentialWatchTargets = detectionRange.PotentialTargets;
     if (potentialWatchTargets.Count > 0) {
       return potentialWatchTargets.OrderBy(
         t => Vector3.Distance(transform.position, t.transform.position)
       ).First();
     }
     return null;
-  }
-
-  private void OnActingRangeTriggerEnter(Collider collider) {
-    potentialActionTargets.Add(collider.gameObject);
-  }
-
-  private void OnActingRangeTriggerExit(Collider collider) {
-    potentialActionTargets.Remove(collider.gameObject);
-  }
-
-  private void OnDetectionRangeTriggerEnter(Collider collider) {
-    potentialWatchTargets.Add(collider.gameObject);
-  }
-
-  private void OnDetectionRangeTriggerExit(Collider collider) {
-    potentialWatchTargets.Remove(collider.gameObject);
   }
 }

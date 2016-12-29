@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 
 public abstract class Resource : BaseBehaviour {
+  [SerializeField]
   private float baseMaxValue;
   private float currentValue;
 
-  public float baseRegen;
-  public float bonusRegen;
+  [SerializeField]
+  private float baseRegen;
+  private float bonusRegen;
 
   public delegate void ValueChangedDelegate(float oldValue, float newValue);
   public event ValueChangedDelegate OnValueChanged;
@@ -75,6 +77,12 @@ public abstract class Resource : BaseBehaviour {
     get {
       return BaseRegenRate + BonusRegenRate;
     }
+  }
+
+  protected override void OnAwake() {
+    base.OnAwake();
+
+    CurrentValue = MaxValue;
   }
 
   protected override void OnUpdate() {
