@@ -5,6 +5,8 @@ public class Shockwave : BaseBehaviour {
   [SerializeField]
   private DelegateCollider[] colliders;
   private HashSet<GameObject> victims;
+  [SerializeField]
+  private GameObject knockbackPrefab;
 
   public GameObject Caster { get; set; }
   public float Power { get; set; }
@@ -36,7 +38,8 @@ public class Shockwave : BaseBehaviour {
       return;
     }
     victims.Add(collider.gameObject);
-    victimRigidbody.gameObject.AddComponent<Knockback>().Force =
-      transform.forward * Power;
+    Effect.Apply(knockbackPrefab, victimRigidbody.gameObject)
+      .GetComponent<KnockbackEffect>()
+      .Force = Power * transform.forward;
   }
 }

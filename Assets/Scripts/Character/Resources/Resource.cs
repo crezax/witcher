@@ -10,6 +10,9 @@ public abstract class Resource : BaseBehaviour {
   public delegate void ValueChangedDelegate(float oldValue, float newValue);
   public event ValueChangedDelegate OnValueChanged;
 
+  public delegate float ValueWillChangeDelegate(float oldValue, float newValue);
+  public event ValueWillChangeDelegate OnValueWillChange;
+
   protected virtual bool ShouldRegen {
     get {
       return true;
@@ -58,6 +61,9 @@ public abstract class Resource : BaseBehaviour {
     }
     set {
       float oldValue = currentValue;
+      if (OnValueWillChange != null) {
+        value = OnValueWillChange(oldValue, value);
+      }
       currentValue = Mathf.Min(MaxValue, Mathf.Max(value, 0));
       if (OnValueChanged != null) {
         OnValueChanged(oldValue, currentValue);

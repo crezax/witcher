@@ -91,7 +91,7 @@ public class PlayerController : BaseBehaviour {
   }
 
   private void HandleSigns() {
-    selectedSignId = (signs.Length + (int)Input.GetAxis(MOUSE_WHEEL_AXIS)) % signs.Length;
+    selectedSignId = (selectedSignId + signs.Length + (int)Input.GetAxis(MOUSE_WHEEL_AXIS)) % signs.Length;
 
     if (Input.GetButtonDown(SIGN_BUTTON)) {
       // TODO: Some targeting manager would be nice

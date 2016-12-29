@@ -1,17 +1,18 @@
 ﻿using UnityEngine;
 
-public class Knockback : Effect {
+public class KnockbackEffect : Effect {
 
   public Vector3 Force { get; set; }
 
-  public override bool IsValidTarget() {
-    return GetComponent<Character>() != null || GetComponent<Rigidbody>() != null;
+  public override bool IsValidTarget(GameObject target) {
+    return target.GetComponent<Character>() != null ||
+      target.GetComponent<Rigidbody>() != null;
   }
 
-  public override void OnEffectStart() {
-    Character character = GetComponent<Character>();
+  public override void OnEffectStart(GameObject target) {
+    Character character = target.GetComponent<Character>();
     if (character == null) {
-      GetComponent<Rigidbody>().AddForce(Force, ForceMode.Impulse);
+      target.GetComponent<Rigidbody>().AddForce(Force, ForceMode.Impulse);
       return;
     } else {
       // Could add more fancy stuff with more animations, like target going into
@@ -23,12 +24,12 @@ public class Knockback : Effect {
     }
   }
 
-  public override void OnEffectStay() {
+  public override void OnEffectStay(GameObject target) {
     return;
   }
 
-  public override void OnEffectEnd() {
-    Character character = GetComponent<Character>();
+  public override void OnEffectEnd(GameObject target) {
+    Character character = target.GetComponent<Character>();
     if (character == null) {
       return;
     }

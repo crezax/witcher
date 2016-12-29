@@ -15,6 +15,10 @@ public class EnergyBarController : BaseBehaviour {
   protected override void OnUpdate() {
     base.OnUpdate();
 
-    energy.fillAmount = playerEnergy.CurrentValue / playerEnergy.MaxValue;
+    // * 0.65f because of how radial filled images work in Unity.
+    // We could make it work without that by using different fill method on the 
+    // image, but the effect wouldn't be so similar to original Witcher energy 
+    // bar
+    energy.fillAmount = playerEnergy.CurrentValue / playerEnergy.MaxValue * 0.65f;
   }
 }

@@ -4,26 +4,38 @@
 public abstract class Effect : BaseBehaviour {
   private GameObject target;
 
-  public abstract bool IsValidTarget();
-  public abstract void OnEffectStart();
-  public abstract void OnEffectStay();
-  public abstract void OnEffectEnd();
+  public static GameObject Apply(GameObject effectPrefab, GameObject target) {
+    GameObject effectGO = (GameObject)Instantiate(
+      effectPrefab,
+      target.transform,
+      false
+    );
+    effectGO.GetComponent<Effect>().target = target;
+    return effectGO;
+  }
+
+  public abstract bool IsValidTarget(GameObject target);
+  public abstract void OnEffectStart(GameObject target);
+  public abstract void OnEffectStay(GameObject target);
+  public abstract void OnEffectEnd(GameObject target);
 
   public float DurationLeft { get; set; }
 
-  protected override void OnAwake() {
-    base.OnAwake();
-
-    if (!IsValidTarget()) {
-      Destroy(this);
-      return;
+  protected GameObject Target {
+    get {
+      return target;
     }
   }
 
   protected override void OnStart() {
     base.OnStart();
 
-    OnEffectStart();
+    if (!IsValidTarget(target)) {
+      Destroy(this);
+      return;
+    }
+
+    OnEffectStart(target);
   }
 
   protected override void OnUpdate() {
@@ -35,12 +47,12 @@ public abstract class Effect : BaseBehaviour {
     }
 
     DurationLeft -= Time.deltaTime;
-    OnEffectStay();
+    OnEffectStay(target);
   }
 
   protected override void OnWillDestroy() {
     base.OnWillDestroy();
 
-    OnEffectEnd();
+    OnEffectEnd(target);
   }
 }
