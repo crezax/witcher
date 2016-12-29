@@ -71,7 +71,7 @@ public class CameraController : BaseBehaviour {
     if (targetingDetector.PotentialTargets.Count > 0) {
       Target = targetingDetector
         .PotentialTargets
-        .Where(t => t.GetComponent<Character>() != null)
+        .Where(t => t.GetComponent<Character>() != null && t != gameObject)
         .Select(t => t.GetComponent<Character>())
         .OrderBy(
         t => Vector3.Distance(

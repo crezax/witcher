@@ -14,6 +14,10 @@ public abstract class Effect : BaseBehaviour {
     return effectGO;
   }
 
+  public static Effect[] GetEffectsOnTarget(GameObject target) {
+    return target.GetComponentsInChildren<Effect>();
+  }
+
   public abstract bool IsValidTarget(GameObject target);
   public abstract void OnEffectStart(GameObject target);
   public abstract void OnEffectStay(GameObject target);

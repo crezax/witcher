@@ -10,10 +10,9 @@ public class ShieldEffect : Effect {
 
   public override void OnEffectStart(GameObject target) {
     // Make sure we don't put double shield on a character
-    ShieldEffect[] shieldEffects = target.GetComponentsInChildren<ShieldEffect>();
-    foreach (ShieldEffect shieldEffect in shieldEffects) {
-      if (shieldEffect != this) {
-        Destroy(shieldEffect.gameObject);
+    foreach (Effect effect in GetEffectsOnTarget(target)) {
+      if (effect is ShieldEffect && effect != this) {
+        Destroy(effect.gameObject);
       }
     }
 
