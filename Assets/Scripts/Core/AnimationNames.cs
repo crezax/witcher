@@ -11,4 +11,6 @@
   // While obviously this wouldn't work in case we had lots of characters that 
   // have different animations. But well, good enough for now I guess
   public const float KNOCKBACK_DURATION = 2.367f;
+  public const float ATTACK_DURATION = 2.767f;
+  public const float CASTING_DURATION = 1.167f;
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using System.Collections;
 
-public class MeleeAttack : Skill {
+public abstract class RangeBasedAttack : Skill {
   [SerializeField]
   private CharacterDetector attackRange;
 
@@ -31,13 +32,6 @@ public class MeleeAttack : Skill {
     }
   }
 
-  protected override float CastTime {
-    get {
-      // Only animation we have is 2.767 long, so we don't really have a choice
-      return 2.767f;
-    }
-  }
-
   protected override float EffectTime {
     get {
       // Sword swings at more less that time
@@ -62,18 +56,5 @@ public class MeleeAttack : Skill {
     }
     // is target in range
     return AttackRange.PotentialTargets.Contains(target);
-  }
-
-  protected override void PerformImplementation(GameObject target) {
-    foreach (GameObject targetInRange in attackRange.PotentialTargets) {
-      Health targetHealth = targetInRange.GetComponent<Health>();
-      if (targetHealth != null) {
-        // Should always be true, unless someone created character without
-        // Health, or there is a non character layer triggering character
-        // detection layer... Maybe it would be good to even throw if thats 
-        // the case?
-        targetHealth.CurrentValue -= Damage;
-      }
-    }
   }
 }

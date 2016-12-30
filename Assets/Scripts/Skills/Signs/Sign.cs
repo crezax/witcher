@@ -19,9 +19,7 @@ public abstract class Sign : Skill {
 
   protected override float CastTime {
     get {
-      // 1.167 is the duration of skill animation, so I guess this will have to
-      // do for prototype
-      return 1.167f;
+      return AnimationConstants.CASTING_DURATION;
     }
   }
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(Speed))]
 public class MovementController : BaseBehaviour {
 
   private Vector3 target;
