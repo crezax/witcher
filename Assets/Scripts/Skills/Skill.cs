@@ -6,7 +6,7 @@ public abstract class Skill : BaseBehaviour {
   protected abstract float CastTime { get; }
   protected abstract float EffectTime { get; }
   protected abstract void PerformImplementation(GameObject target);
-  public abstract bool CanPerform(GameObject target);
+  protected abstract bool CanPerformImplementation(GameObject target);
   protected abstract void PaySkillCost();
 
   private Character skillUser;
@@ -24,11 +24,16 @@ public abstract class Skill : BaseBehaviour {
 
     skillUser = GetComponent<Character>();
     animator = GetComponent<Animator>();
+  }
 
+  public bool CanPerform(GameObject target) {
+    return CanPerformImplementation(target) &&
+      skillUser.CanUseSkills &&
+      !skillUser.IsUsingSkill;
   }
 
   public void Perform(GameObject target) {
-    if (!CanPerform(target) || !skillUser.CanUseSkills || skillUser.IsUsingSkill) {
+    if (!CanPerform(target)) {
       return;
     }
     StartCoroutine(PerformCoroutine(target));

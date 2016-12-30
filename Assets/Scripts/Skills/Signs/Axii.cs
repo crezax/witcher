@@ -10,8 +10,8 @@ public class Axii : Sign {
     }
   }
 
-  public override bool CanPerform(GameObject target) {
-    return target != null && base.CanPerform(target);
+  protected override bool CanPerformImplementation(GameObject target) {
+    return target != null && base.CanPerformImplementation(target);
   }
 
   protected override void PerformImplementation(GameObject target) {

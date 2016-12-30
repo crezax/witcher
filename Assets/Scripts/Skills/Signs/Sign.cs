@@ -13,7 +13,7 @@ public abstract class Sign : Skill {
     }
   }
 
-  public override bool CanPerform(GameObject target) {
+  protected override bool CanPerformImplementation(GameObject target) {
     return Energy.CurrentValue >= EnergyCost;
   }
 
