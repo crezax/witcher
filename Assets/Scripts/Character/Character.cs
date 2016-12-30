@@ -132,6 +132,9 @@ public class Character : BaseBehaviour {
   }
 
   public void ReceiveDisablingHit(float duration) {
+    if (Health.CurrentValue == 0) {
+      return;
+    }
     StartCoroutine(DisablingHitCoroutine(duration));
   }
 

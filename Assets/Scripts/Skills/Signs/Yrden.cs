@@ -17,7 +17,7 @@ public class Yrden : Sign {
   protected override void OnAwake() {
     base.OnAwake();
 
-    Duration = 5;
+    Duration = 10;
   }
 
   protected override void PerformImplementation(GameObject target) {

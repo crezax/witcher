@@ -24,7 +24,7 @@ public class Health : Resource {
       OnDeath();
     }
     if (animator != null) {
-      animator.SetTrigger(AnimationConstants.DIE);
+      animator.SetBool(AnimationConstants.IS_DEAD, true);
     }
   }
 
