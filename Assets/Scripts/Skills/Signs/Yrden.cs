@@ -3,6 +3,8 @@
 public class Yrden : Sign {
   [SerializeField]
   private GameObject yrdenTrapPrefab;
+  [SerializeField]
+  private LayerMask raycastLayerMask;
 
   protected override float EnergyCost {
     get {
@@ -34,7 +36,9 @@ public class Yrden : Sign {
       bool hit = Physics.Raycast(
         transform.position + direction * radius + Vector3.up * 1,
         -Vector3.up,
-        out raycastInfo
+        out raycastInfo,
+        Mathf.Infinity,
+        raycastLayerMask
       );
 
       if (hit) {
