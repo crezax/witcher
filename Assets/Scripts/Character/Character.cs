@@ -17,6 +17,12 @@ public class Character : BaseBehaviour {
   }
   private bool lastFrameCombatStatus;
 
+  protected virtual float DecayTime {
+    get {
+      return 5;
+    }
+  }
+
   private HashSet<GameObject> attackers;
   private Energy energy;
   private Health health;
@@ -135,6 +141,13 @@ public class Character : BaseBehaviour {
     attackers = new HashSet<GameObject>();
     animator = GetComponent<Animator>();
     characterCollider = GetComponent<Collider>();
+
+    health.OnDeath += OnDeath;
+  }
+
+  private void OnDeath() {
+    DisableAction();
+    Destroy(gameObject, DecayTime);
   }
 
   protected override void OnUpdate() {
