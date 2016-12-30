@@ -16,6 +16,8 @@ public class MovementController : BaseBehaviour {
   private bool canMove;
   private Animator animator;
 
+  private const float RUN_TRESHOLD = 1;
+
   public Vector3 Target {
     get {
       return target;
@@ -35,7 +37,7 @@ public class MovementController : BaseBehaviour {
       if (animator == null) {
         return;
       }
-      if (speed.IsRunning) {
+      if (speed.BonusSpeed > RUN_TRESHOLD) {
         animator.SetBool(AnimationConstants.IS_RUNNING, isMoving);
         animator.SetBool(AnimationConstants.IS_WALKING, false);
       } else {

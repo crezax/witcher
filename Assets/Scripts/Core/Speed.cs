@@ -2,27 +2,21 @@
 
 public class Speed : BaseBehaviour {
   [SerializeField]
-  private float walkingSpeed;
+  private float baseSpeed;
   [SerializeField]
-  private float runningSpeed;
+  private float bonusSpeed;
 
-  protected float WalkingSpeed {
+  public float BaseSpeed {
     get {
-      return walkingSpeed;
+      return baseSpeed;
     }
   }
 
-  protected float RunningSpeed {
-    get {
-      return runningSpeed;
-    }
-  }
-
-  public bool IsRunning { get; set; }
+  public float BonusSpeed { get; set; }
 
   public float CurrentSpeed {
     get {
-      return IsRunning ? RunningSpeed : WalkingSpeed;
+      return BonusSpeed + BaseSpeed;
     }
   }
 }

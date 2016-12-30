@@ -23,6 +23,8 @@ public class PlayerController : BaseBehaviour {
   private Sign[] signs;
   private int selectedSignId;
   private MeleeAttack meleeAttack;
+  private float bonusRunSpeed = 3;
+  private bool isRunning;
 
   public Sign SelectedSign {
     get {
@@ -63,19 +65,36 @@ public class PlayerController : BaseBehaviour {
     HandleSwordCombat();
   }
 
+  private bool IsRunning {
+    get {
+      return isRunning;
+    }
+    set {
+      if (isRunning == value) {
+        return;
+      }
+      isRunning = value;
+      if (isRunning) {
+        playerSpeed.BonusSpeed += bonusRunSpeed;
+      } else {
+        playerSpeed.BonusSpeed -= bonusRunSpeed;
+      }
+    }
+  }
+
   private void HandleMovement() {
     if (Input.GetButtonDown(RUN_BUTTON) && playerEnergy.CurrentValue > RUN_ENERGY_COST) {
-      playerSpeed.IsRunning = true;
+      IsRunning = true;
     }
 
     if (Input.GetButtonUp(RUN_BUTTON)) {
-      playerSpeed.IsRunning = false;
+      IsRunning = false;
     }
 
-    if (playerSpeed.IsRunning && playerMovementController.IsMoving) {
+    if (IsRunning && playerMovementController.IsMoving) {
       playerEnergy.CurrentValue -= RUN_ENERGY_COST * Time.deltaTime;
       if (playerEnergy.CurrentValue == 0) {
-        playerSpeed.IsRunning = false;
+        IsRunning = false;
       }
     }
 
