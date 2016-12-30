@@ -103,11 +103,7 @@ public class PlayerController : BaseBehaviour {
     dirVector.y = 0;
 
     if (dirVector == Vector3.zero) {
-      if (playerMovementController.Followed == null) {
-        // just a small condition making following the enemy possible, but it
-        // shouldn't be needed once we have jump forward animation
-        playerMovementController.Stop();
-      }
+      playerMovementController.Stop();
     } else {
       playerMovementController.MoveInDirection(dirVector);
     }
@@ -125,8 +121,7 @@ public class PlayerController : BaseBehaviour {
     if (Input.GetButtonDown(SWORD_BUTTON)) {
       GameObject targetGO = CameraController.Instance.TargetGO;
       if (targetGO != null && !meleeAttack.CanPerform(targetGO) && !Player.Instance.IsUsingSkill) {
-        // Perform jump animation towards target, we don't have that, so follow
-        playerMovementController.Follow(targetGO);
+        // Perform jump animation towards target, we don't have that sadly
       } else {
         meleeAttack.Perform(targetGO);
       }
