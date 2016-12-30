@@ -18,7 +18,7 @@ public class Yrden : Sign {
     Duration = 5;
   }
 
-  protected override void PerformImplementation() {
+  protected override void PerformImplementation(GameObject target) {
     Vector3 direction = transform.forward;
     float radius = 5;
     int trapCount = 6;

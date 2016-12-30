@@ -21,7 +21,8 @@ public class Igni : Sign {
     BurnDuration = 5;
   }
 
-  protected override void PerformImplementation() {
+  protected override void PerformImplementation(GameObject target) {
+    // Maybe rotate towards target 1st?
     GameObject flameWaveGO = (GameObject)Instantiate(
       flameWavePrefab,
       transform.position,

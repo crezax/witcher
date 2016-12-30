@@ -94,14 +94,13 @@ public class PlayerController : BaseBehaviour {
     selectedSignId = (selectedSignId + signs.Length + (int)Input.GetAxis(MOUSE_WHEEL_AXIS)) % signs.Length;
 
     if (Input.GetButtonDown(SIGN_BUTTON)) {
-      // TODO: Some targeting manager would be nice
-      SelectedSign.Perform(null);
+      SelectedSign.Perform(CameraController.Instance.TargetGO);
     }
   }
 
   private void HandleSwordCombat() {
     if (Input.GetButtonDown(SWORD_BUTTON)) {
-      meleeAttack.Perform(null);
+      meleeAttack.Perform(CameraController.Instance.TargetGO);
     }
   }
 }

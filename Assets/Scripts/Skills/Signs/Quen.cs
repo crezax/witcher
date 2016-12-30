@@ -10,7 +10,7 @@ public class Quen : Sign {
     }
   }
 
-  protected override void PerformImplementation() {
+  protected override void PerformImplementation(GameObject target) {
     Effect.Apply(shieldPrefab, gameObject)
       .GetComponent<ShieldEffect>()
       .DurationLeft = 30;

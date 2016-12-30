@@ -31,6 +31,15 @@ public class CameraController : BaseBehaviour {
     }
   }
 
+  public GameObject TargetGO {
+    get {
+      if (Target == null) {
+        return null;
+      }
+      return Target.gameObject;
+    }
+  }
+
   public static CameraController Instance {
     get {
       return instance;
@@ -71,7 +80,7 @@ public class CameraController : BaseBehaviour {
     if (targetingDetector.PotentialTargets.Count > 0) {
       Target = targetingDetector
         .PotentialTargets
-        .Where(t => t.GetComponent<Character>() != null && t != gameObject)
+        .Where(t => t.GetComponent<Character>() != null)
         .Select(t => t.GetComponent<Character>())
         .OrderBy(
         t => Vector3.Distance(
@@ -87,6 +96,7 @@ public class CameraController : BaseBehaviour {
   protected override void OnLateUpdate() {
     base.OnLateUpdate();
 
-    transform.position = Player.Instance.transform.position;
+    transform.position = Player.Instance.transform.position +
+      Vector3.up * Player.Instance.Height;
   }
 }

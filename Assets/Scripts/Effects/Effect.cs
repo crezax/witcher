@@ -25,6 +25,8 @@ public abstract class Effect : BaseBehaviour {
 
   public float DurationLeft { get; set; }
 
+  private bool wasEffectApplied;
+
   protected GameObject Target {
     get {
       return target;
@@ -39,6 +41,7 @@ public abstract class Effect : BaseBehaviour {
       return;
     }
 
+    wasEffectApplied = true;
     OnEffectStart(target);
   }
 
@@ -57,6 +60,8 @@ public abstract class Effect : BaseBehaviour {
   protected override void OnWillDestroy() {
     base.OnWillDestroy();
 
-    OnEffectEnd(target);
+    if (wasEffectApplied) {
+      OnEffectEnd(target);
+    }
   }
 }

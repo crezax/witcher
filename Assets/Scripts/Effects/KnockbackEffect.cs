@@ -4,6 +4,7 @@ public class KnockbackEffect : Effect {
 
   public Vector3 Force { get; set; }
   public Transform Source { get; set; }
+  public float Damage { get; set; }
 
   public override bool IsValidTarget(GameObject target) {
     return target.GetComponent<Character>() != null ||
@@ -24,8 +25,8 @@ public class KnockbackEffect : Effect {
       // throw character at us when we Aard someone's back
       character.transform.LookAt(Source);
       character.Animator.SetTrigger(AnimationConstants.KNOCKBACK);
-      character.MovementController.Stop();
-      character.MovementController.CanMove = false;
+      character.DisableAction();
+      character.Health.CurrentValue -= Damage;
     }
   }
 
@@ -38,6 +39,6 @@ public class KnockbackEffect : Effect {
     if (character == null) {
       return;
     }
-    character.MovementController.CanMove = true;
+    character.EnableAction();
   }
 }

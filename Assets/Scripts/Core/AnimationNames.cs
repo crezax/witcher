@@ -2,7 +2,8 @@
   public const string ATTACK = "Attack";
   public const string IS_RUNNING = "IsRunning";
   public const string IS_WALKING = "IsWalking";
-  public const string IS_WATCHING = "IsWatching";
+  public const string IS_WATCHING = "IsStanding";
+  public const string IS_STUNNED = "IsStanding";
   public const string KNOCKBACK = "Knockback";
   public const string SKILL = "Skill";
 

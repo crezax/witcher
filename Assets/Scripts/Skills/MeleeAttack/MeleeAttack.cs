@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class MeleeAttack : Skill {
+public abstract class MeleeAttack : Skill {
   [SerializeField]
   private CharacterDetector attackRange;
 
@@ -10,6 +9,12 @@ public class MeleeAttack : Skill {
   public float Damage {
     get {
       return BaseDamage + BonusDamage;
+    }
+  }
+
+  protected CharacterDetector AttackRange {
+    get {
+      return attackRange;
     }
   }
 
@@ -24,20 +29,6 @@ public class MeleeAttack : Skill {
     get {
       return AnimationConstants.ATTACK;
     }
-  }
-
-  public override bool CanPerform(GameObject target) {
-    if (target == null) {
-      // I mean, swing the sword into the air, why not?
-      return true;
-    }
-    Health targetHealth = target.GetComponent<Health>();
-    if (targetHealth == null) {
-      // I mean, swing the sword into the air, why not?
-      return true;
-    }
-    // is target in range
-    return attackRange.PotentialTargets.Contains(target);
   }
 
   protected override float CastTime {
@@ -59,9 +50,9 @@ public class MeleeAttack : Skill {
     return;
   }
 
-  protected override void PerformImplementation() {
-    foreach (GameObject target in attackRange.PotentialTargets) {
-      Health targetHealth = target.GetComponent<Health>();
+  protected override void PerformImplementation(GameObject target) {
+    foreach (GameObject targetInRange in attackRange.PotentialTargets) {
+      Health targetHealth = targetInRange.GetComponent<Health>();
       if (targetHealth != null) {
         // Should always be true, unless someone created character without
         // Health, or there is a non character layer triggering character

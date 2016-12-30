@@ -11,7 +11,8 @@ public class Aard : Sign {
     }
   }
 
-  protected override void PerformImplementation() {
+  protected override void PerformImplementation(GameObject target) {
+    // Maybe rotate towards target 1st?
     GameObject shockWaveGO = (GameObject)Instantiate(
       shockwavePrefab,
       transform.position,

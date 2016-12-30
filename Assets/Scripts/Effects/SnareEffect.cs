@@ -2,12 +2,12 @@
 
 public class SnareEffect : Effect {
   public override bool IsValidTarget(GameObject target) {
-    return target.GetComponent<MovementController>() != null;
+    return target.GetComponent<Character>() != null;
   }
 
   public override void OnEffectStart(GameObject target) {
     DurationLeft = 5;
-    target.GetComponent<MovementController>().CanMove = false;
+    target.GetComponent<Character>().DisableMovement();
   }
 
   public override void OnEffectStay(GameObject target) { }
@@ -16,6 +16,6 @@ public class SnareEffect : Effect {
     if (target.GetComponent<MovementController>() == null) {
       return;
     }
-    target.GetComponent<MovementController>().CanMove = true;
+    target.GetComponent<Character>().EnableMovement();
   }
 }

@@ -5,27 +5,33 @@ public abstract class Skill : BaseBehaviour {
 
   protected abstract float CastTime { get; }
   protected abstract float EffectTime { get; }
-  protected abstract void PerformImplementation();
+  protected abstract void PerformImplementation(GameObject target);
   public abstract bool CanPerform(GameObject target);
   protected abstract void PaySkillCost();
 
-  private MovementController movementController;
+  private Character skillUser;
+  private MovementController skillUserMovementController;
   private Animator animator;
 
-  public bool IsPerforming { get; private set; }
+  protected Character SkillUser {
+    get {
+      return skillUser;
+    }
+  }
 
   protected override void OnAwake() {
     base.OnAwake();
 
-    movementController = GetComponent<MovementController>();
+    skillUser = GetComponent<Character>();
     animator = GetComponent<Animator>();
+
   }
 
   public void Perform(GameObject target) {
-    if (!CanPerform(target) || !movementController.CanMove) {
+    if (!CanPerform(target) || !skillUser.CanUseSkills || skillUser.IsUsingSkill) {
       return;
     }
-    StartCoroutine(PerformCoroutine());
+    StartCoroutine(PerformCoroutine(target));
   }
 
   protected virtual string AnimationName {
@@ -34,21 +40,27 @@ public abstract class Skill : BaseBehaviour {
     }
   }
 
-  private IEnumerator PerformCoroutine() {
+  private IEnumerator PerformCoroutine(GameObject target) {
     animator.SetTrigger(AnimationName);
+    float startTime = Time.time;
 
-    if (movementController != null) {
-      movementController.Stop();
-      movementController.CanMove = false;
+    skillUser.IsUsingSkill = true;
+
+    while (Time.time - startTime < EffectTime) {
+      if (skillUser.CanUseSkills) {
+        yield return null;
+        continue;
+      }
+      FinishPerforming();
+      yield break;
     }
     PaySkillCost();
-    IsPerforming = true;
-    yield return new WaitForSeconds(EffectTime);
-    PerformImplementation();
+    PerformImplementation(target);
     yield return new WaitForSeconds(CastTime - EffectTime);
-    IsPerforming = false;
-    if (movementController != null) {
-      movementController.CanMove = true;
-    }
+    FinishPerforming();
+  }
+
+  private void FinishPerforming() {
+    skillUser.IsUsingSkill = false;
   }
 }

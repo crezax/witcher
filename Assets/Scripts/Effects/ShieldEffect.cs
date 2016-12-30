@@ -31,9 +31,7 @@ public class ShieldEffect : Effect {
     return newValue;
   }
 
-  public override void OnEffectStay(GameObject target) {
-    return;
-  }
+  public override void OnEffectStay(GameObject target) { }
 
   public override void OnEffectEnd(GameObject target) {
     target.GetComponent<Health>().OnValueWillChange -= OnTargetAttacked;

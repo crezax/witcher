@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(MovementController))]
@@ -23,6 +24,10 @@ public class Character : BaseBehaviour {
   private Animator animator;
   private CombatBehaviour[] combatBehaviours;
   private Collider characterCollider;
+
+  private int skillStoppers;
+  private int movementStoppers;
+  private bool isUsingSkill;
 
   public Energy Energy {
     get {
@@ -53,6 +58,72 @@ public class Character : BaseBehaviour {
       return characterCollider.bounds.size.y;
     }
   }
+
+  #region CharacterStateMethods
+  public void EnableSkillUsage() {
+    if (skillStoppers == 0) {
+      throw new Exception(
+        "You called EnableSkillUsage before calling DisableSkillUsage"
+      );
+    }
+    skillStoppers--;
+  }
+
+  public void DisableSkillUsage() {
+    skillStoppers++;
+  }
+
+  public void EnableMovement() {
+    if (movementStoppers == 0) {
+      throw new Exception(
+        "You called EnableMovement before calling DisableMovement"
+      );
+    }
+    movementStoppers--;
+    movementController.CanMove = movementStoppers == 0;
+  }
+
+  public void DisableMovement() {
+    movementStoppers++;
+    movementController.CanMove = false;
+  }
+
+  public void EnableAction() {
+    EnableMovement();
+    EnableSkillUsage();
+  }
+
+  public void DisableAction() {
+    DisableMovement();
+    DisableSkillUsage();
+  }
+
+  public bool IsUsingSkill {
+    get {
+      return isUsingSkill;
+    }
+    set {
+      isUsingSkill = value;
+      if (isUsingSkill) {
+        DisableMovement();
+      } else {
+        EnableMovement();
+      }
+    }
+  }
+
+  public bool CanMove {
+    get {
+      return movementController.CanMove;
+    }
+  }
+
+  public bool CanUseSkills {
+    get {
+      return skillStoppers == 0;
+    }
+  }
+  #endregion
 
   protected override void OnAwake() {
     base.OnAwake();
