@@ -17,6 +17,10 @@ public class MeleeAttack : RangeBasedAttack {
         // the case?
         targetHealth.CurrentValue -= Damage;
       }
+      Character targetCharacter = targetInRange.GetComponent<Character>();
+      if (targetCharacter != null) {
+        targetCharacter.ReceiveDisablingHit(.5f);
+      }
     }
   }
 }

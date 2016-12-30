@@ -8,7 +8,14 @@ public class DamageProjectile : Projectile {
   public float Damage { get; set; }
 
   protected override void OnHit(Collider collider) {
-    collider.GetComponent<Health>().CurrentValue -= Damage;
+    Health targetHealth = collider.GetComponent<Health>();
+    if (targetHealth != null) {
+      targetHealth.CurrentValue -= Damage;
+    }
+    Character targetCharacter = collider.GetComponent<Character>();
+    if (targetCharacter != null) {
+      targetCharacter.ReceiveDisablingHit(.5f);
+    }
     Instantiate(hitParticlesPrefab).transform.position = transform.position;
     Destroy(gameObject);
   }

@@ -1,6 +1,7 @@
 ﻿public class AnimationConstants {
   public const string ATTACK = "Attack";
   public const string DIE = "Die";
+  public const string GET_HIT = "GetHit";
   public const string IS_RUNNING = "IsRunning";
   public const string IS_WALKING = "IsWalking";
   public const string IS_WATCHING = "IsStanding";

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -128,6 +129,17 @@ public class Character : BaseBehaviour {
     get {
       return skillStoppers == 0;
     }
+  }
+
+  public void ReceiveDisablingHit(float duration) {
+    StartCoroutine(DisablingHitCoroutine(duration));
+  }
+
+  private IEnumerator DisablingHitCoroutine(float duration) {
+    DisableAction();
+    Animator.SetTrigger(AnimationConstants.GET_HIT);
+    yield return new WaitForSeconds(duration);
+    EnableAction();
   }
   #endregion
 
