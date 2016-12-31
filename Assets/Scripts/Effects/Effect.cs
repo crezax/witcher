@@ -18,10 +18,22 @@ public abstract class Effect : BaseBehaviour {
     return target.GetComponentsInChildren<Effect>();
   }
 
-  public abstract bool IsValidTarget(GameObject target);
+  public static void RemoveAllEffects(GameObject target) {
+    foreach (Effect effect in GetEffectsOnTarget(target)) {
+      Destroy(effect.gameObject);
+    }
+  }
+
+  protected abstract bool IsValidTargetImplementation(GameObject target);
   public abstract void OnEffectStart(GameObject target);
   public abstract void OnEffectStay(GameObject target);
   public abstract void OnEffectEnd(GameObject target);
+
+  public bool IsValidTarget(GameObject target) {
+    Health targetHealth = target.GetComponent<Health>();
+    return (targetHealth == null || targetHealth.CurrentValue > 0) &&
+      IsValidTargetImplementation(target);
+  }
 
   public float DurationLeft { get; set; }
 

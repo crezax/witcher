@@ -4,7 +4,7 @@ public class ShieldEffect : Effect {
   [SerializeField]
   private GameObject shieldPrefab;
 
-  public override bool IsValidTarget(GameObject target) {
+  protected override bool IsValidTargetImplementation(GameObject target) {
     return target.GetComponent<Health>() != null;
   }
 

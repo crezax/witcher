@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -130,20 +129,6 @@ public class Character : BaseBehaviour {
       return skillStoppers == 0;
     }
   }
-
-  public void ReceiveDisablingHit(float duration) {
-    if (Health.CurrentValue == 0) {
-      return;
-    }
-    StartCoroutine(DisablingHitCoroutine(duration));
-  }
-
-  private IEnumerator DisablingHitCoroutine(float duration) {
-    DisableAction();
-    Animator.SetTrigger(AnimationConstants.GET_HIT);
-    yield return new WaitForSeconds(duration);
-    EnableAction();
-  }
   #endregion
 
   protected override void OnAwake() {
@@ -162,6 +147,7 @@ public class Character : BaseBehaviour {
 
   private void OnDeath() {
     DisableAction();
+    Effect.RemoveAllEffects(gameObject);
     Destroy(gameObject, DecayTime);
   }
 

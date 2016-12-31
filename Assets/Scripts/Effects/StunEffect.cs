@@ -1,21 +1,18 @@
 ﻿using UnityEngine;
 
-public class SnareEffect : Effect {
+public class StunEffect : Effect {
   protected override bool IsValidTargetImplementation(GameObject target) {
     return target.GetComponent<Character>() != null;
   }
 
   public override void OnEffectStart(GameObject target) {
-    DurationLeft = 5;
-    target.GetComponent<Character>().DisableMovement();
+    target.GetComponent<Character>().DisableAction();
+    target.GetComponent<Character>().Animator.SetTrigger(AnimationConstants.GET_HIT);
   }
 
   public override void OnEffectStay(GameObject target) { }
 
   public override void OnEffectEnd(GameObject target) {
-    if (target.GetComponent<MovementController>() == null) {
-      return;
-    }
-    target.GetComponent<Character>().EnableMovement();
+    target.GetComponent<Character>().EnableAction();
   }
 }

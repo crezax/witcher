@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class DamageProjectile : Projectile {
   [SerializeField]
   private GameObject hitParticlesPrefab;
+  [SerializeField]
+  private GameObject stunEffectPrefab;
 
   public float Damage { get; set; }
 
@@ -12,9 +13,10 @@ public class DamageProjectile : Projectile {
     if (targetHealth != null) {
       targetHealth.CurrentValue -= Damage;
     }
-    Character targetCharacter = collider.GetComponent<Character>();
-    if (targetCharacter != null) {
-      targetCharacter.ReceiveDisablingHit(.5f);
+    if (collider.GetComponent<Character>() != null) {
+      Effect.Apply(stunEffectPrefab, collider.gameObject)
+        .GetComponent<Effect>()
+        .DurationLeft = .5f;
     }
     Instantiate(hitParticlesPrefab).transform.position = transform.position;
     Destroy(gameObject);

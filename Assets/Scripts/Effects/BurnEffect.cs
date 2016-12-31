@@ -5,7 +5,7 @@ public class BurnEffect : Effect {
   public float BurnDamage { get; set; }
   private Health targetHealth;
 
-  public override bool IsValidTarget(GameObject target) {
+  protected override bool IsValidTargetImplementation(GameObject target) {
     return target.GetComponent<Health>() != null;
   }
 

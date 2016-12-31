@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
 public class MeleeAttack : RangeBasedAttack {
+  [SerializeField]
+  private GameObject stunEffectPrefab;
+
   protected override float CastTime {
     get {
       return AnimationConstants.ATTACK_DURATION;
@@ -17,9 +20,10 @@ public class MeleeAttack : RangeBasedAttack {
         // the case?
         targetHealth.CurrentValue -= Damage;
       }
-      Character targetCharacter = targetInRange.GetComponent<Character>();
-      if (targetCharacter != null) {
-        targetCharacter.ReceiveDisablingHit(.5f);
+      if (targetInRange.GetComponent<Character>() != null) {
+        Effect.Apply(stunEffectPrefab, targetInRange.gameObject)
+          .GetComponent<Effect>()
+          .DurationLeft = .5f;
       }
     }
   }
