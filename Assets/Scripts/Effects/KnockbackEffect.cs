@@ -6,6 +6,12 @@ public class KnockbackEffect : Effect {
   public Transform Source { get; set; }
   public float Damage { get; set; }
 
+  public override bool IsPositive {
+    get {
+      return false;
+    }
+  }
+
   protected override bool IsValidTargetImplementation(GameObject target) {
     return target.GetComponent<Character>() != null ||
       target.GetComponent<Rigidbody>() != null;

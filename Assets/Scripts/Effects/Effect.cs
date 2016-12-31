@@ -10,7 +10,13 @@ public abstract class Effect : BaseBehaviour {
       target.transform,
       false
     );
-    effectGO.GetComponent<Effect>().target = target;
+    Effect effect = effectGO.GetComponent<Effect>();
+    effect.target = target;
+    foreach (Effect e in GetEffectsOnTarget(target)) {
+      if (effect != e) {
+        e.OnOtherEffectApplied(effect);
+      }
+    }
     return effectGO;
   }
 
@@ -28,6 +34,10 @@ public abstract class Effect : BaseBehaviour {
   public abstract void OnEffectStart(GameObject target);
   public abstract void OnEffectStay(GameObject target);
   public abstract void OnEffectEnd(GameObject target);
+  // If it ever happens that there are more than negative and positive effects
+  // we can just replace with enum
+  public abstract bool IsPositive { get; }
+  protected virtual void OnOtherEffectApplied(Effect effect) { }
 
   public bool IsValidTarget(GameObject target) {
     Health targetHealth = target.GetComponent<Health>();

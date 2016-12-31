@@ -3,7 +3,14 @@
 public class BurnEffect : Effect {
 
   public float BurnDamage { get; set; }
+
   private Health targetHealth;
+
+  public override bool IsPositive {
+    get {
+      return false;
+    }
+  }
 
   protected override bool IsValidTargetImplementation(GameObject target) {
     return target.GetComponent<Health>() != null;

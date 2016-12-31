@@ -1,6 +1,12 @@
 ﻿using UnityEngine;
 
 public class IncapacitateEffect : Effect {
+  public override bool IsPositive {
+    get {
+      return false;
+    }
+  }
+
   protected override bool IsValidTargetImplementation(GameObject target) {
     return target.GetComponent<Character>() != null;
   }
