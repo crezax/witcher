@@ -80,14 +80,17 @@ public class CameraController : BaseBehaviour {
     if (targetingDetector.PotentialTargets.Count > 0) {
       Target = targetingDetector
         .PotentialTargets
-        .Where(t => t.GetComponent<Character>() != null)
+        .Where(
+          t => t.GetComponent<Character>() != null &&
+          t.GetComponent<Character>().Health.CurrentValue != 0
+        )
         .Select(t => t.GetComponent<Character>())
         .OrderBy(
         t => Vector3.Distance(
           Player.Instance.transform.position,
           t.transform.position
         )
-      ).First();
+      ).FirstOrDefault();
     } else {
       Target = null;
     }

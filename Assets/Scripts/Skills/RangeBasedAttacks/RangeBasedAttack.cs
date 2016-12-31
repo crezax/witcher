@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public abstract class RangeBasedAttack : Skill {
   [SerializeField]
@@ -53,6 +52,10 @@ public abstract class RangeBasedAttack : Skill {
     if (targetHealth == null) {
       // I mean, swing the sword into the air, why not?
       return true;
+    }
+    if (targetHealth.CurrentValue == 0) {
+      // Let's not attack a dead one, ok?
+      return false;
     }
     // is target in range
     return AttackRange.PotentialTargets.Contains(target);
