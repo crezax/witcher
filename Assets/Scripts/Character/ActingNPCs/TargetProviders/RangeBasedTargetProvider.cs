@@ -15,14 +15,26 @@ public class RangeBasedTargetProvider : TargetProvider {
   protected CharacterDetector actionRange;
 
   public override GameObject ProvideTarget() {
-    List<GameObject> potentialActionTargets = actionRange.PotentialTargets;
+    List<GameObject> potentialActionTargets = actionRange
+      .PotentialTargets
+      .Where(
+        // Ignore dead targets
+        t => t.GetComponent<Health>() == null ||
+          t.GetComponent<Health>().CurrentValue > 0
+      ).ToList();
     if (potentialActionTargets.Count > 0) {
       return potentialActionTargets.OrderBy(
         t => Vector3.Distance(transform.position, t.transform.position)
       ).First();
     }
 
-    List<GameObject> potentialWatchTargets = detectionRange.PotentialTargets;
+    List<GameObject> potentialWatchTargets = detectionRange
+      .PotentialTargets
+      .Where(
+        // Ignore dead targets
+        t => t.GetComponent<Health>() == null ||
+          t.GetComponent<Health>().CurrentValue > 0
+      ).ToList(); ;
     if (potentialWatchTargets.Count > 0) {
       return potentialWatchTargets.OrderBy(
         t => Vector3.Distance(transform.position, t.transform.position)
