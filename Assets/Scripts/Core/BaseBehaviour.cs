@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 
+// Base class for all scripts, instead of MonoBehaviour
+// The reason for this is to override lifecycle methods - VS will autocomplete
+// names and add "base.MethodName()" as first line, which will prevent people
+// from hiding implementation of parent class by mistake.
 public class BaseBehaviour : MonoBehaviour {
 
   protected void Awake() {

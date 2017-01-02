@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 
+// Unity doesn't support having multiple colliders on one gameObject, so if our
+// script logic requires 2 or more colliders/triggers, we can create a child
+// object, attach collider and this script to it. Then the main script can
+// use DelegateCollider to operate on multiple colliders/triggers
 public class DelegateCollider : BaseBehaviour {
   public delegate void TriggerDidEnterHandler(Collider collider);
   public event TriggerDidEnterHandler TriggerDidEnterEvent;

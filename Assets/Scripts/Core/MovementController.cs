@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 
+// This script handles all the movement in game and should be used by every
+// moving character / projectile etc.
+// It uses pretty simple movement logic and may be improved by using some sort
+// of pathfinding
 [RequireComponent(typeof(Speed))]
 public class MovementController : BaseBehaviour {
 
